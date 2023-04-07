@@ -3,16 +3,19 @@ package com.example.githubuserapp.ui.main
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuserapp.databinding.ActivityMainBinding
 import androidx.appcompat.widget.SearchView
-import com.example.githubuserapp.api.model.ItemsUsers
+import com.example.githubuserapp.api.response.ItemsUsers
 import com.example.githubuserapp.R
+import com.example.githubuserapp.ui.favourite.FavouriteActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -82,6 +85,17 @@ class MainActivity : AppCompatActivity() {
         })
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.favourite -> {
+                val intentFavourite = Intent(this@MainActivity, FavouriteActivity::class.java)
+                startActivity(intentFavourite)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 

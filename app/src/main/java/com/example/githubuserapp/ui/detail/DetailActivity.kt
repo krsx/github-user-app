@@ -3,12 +3,14 @@ package com.example.githubuserapp.ui.detail
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.example.githubuserapp.api.model.GithubUserDetailResponse
+import com.example.githubuserapp.api.response.GithubUserDetailResponse
 import com.example.githubuserapp.R
 import com.example.githubuserapp.databinding.ActivityDetailBinding
 import com.google.android.material.tabs.TabLayout
@@ -16,6 +18,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
+    private var isFavourite: Boolean = false
 
     companion object {
         const val KEY_USER = "key_user"
@@ -65,7 +68,34 @@ class DetailActivity : AppCompatActivity() {
         binding.tvError.text = "${detailViewModel.error}\n${detailViewModel.errorResponse}"
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.detail_menu, menu)
 
+        val favouriteItem = menu?.findItem(R.id.favouriteButton)
+        setFavouriteButton(favouriteItem!!, isFavourite)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun setFavouriteButton(favouriteItem: MenuItem, isFavourite: Boolean){
+        if (isFavourite){
+            favouriteItem.setIcon(R.drawable.baseline_favorite_24)
+        }else{
+            favouriteItem.setIcon(R.drawable.baseline_favorite_border_24)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.favouriteButton -> {
+                isFavourite = !isFavourite
+                setFavouriteButton(item, isFavourite)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
     private fun setDetailUserData(user: GithubUserDetailResponse) {
         Glide.with(this).load(user.avatarUrl).into(binding.imgUser)
         binding.name.text = user.name ?: "Username"

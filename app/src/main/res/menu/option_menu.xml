@@ -10,9 +10,9 @@
             app:actionViewClass="androidx.appcompat.widget.SearchView"
             app:showAsAction="collapseActionView|always" />
         <item
-            android:id="@+id/settings"
-            android:icon="@drawable/baseline_settings_24"
-            android:title="@string/settings"
+            android:id="@+id/favourite"
+            android:icon="@drawable/ic_favorite_24"
+            android:title="@string/favourite"
             app:showAsAction="always"/>
     </group>
 
