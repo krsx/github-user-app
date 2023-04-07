@@ -1,11 +1,13 @@
-package com.example.githubuserapp
+package com.example.githubuserapp.ui.main
 
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.githubuserapp.api.model.ItemsUsers
 import com.example.githubuserapp.databinding.ItemUserBinding
+import com.example.githubuserapp.ui.detail.DetailActivity
 
 class ListUserAdapter(private val listUser: List<ItemsUsers?>?) :
     RecyclerView.Adapter<ListUserAdapter.ViewHolder>() {

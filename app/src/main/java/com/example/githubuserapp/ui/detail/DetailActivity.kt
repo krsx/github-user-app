@@ -1,4 +1,4 @@
-package com.example.githubuserapp
+package com.example.githubuserapp.ui.detail
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.githubuserapp.api.model.GithubUserDetailResponse
+import com.example.githubuserapp.R
 import com.example.githubuserapp.databinding.ActivityDetailBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
