@@ -1,5 +1,6 @@
 package com.example.githubuserapp.ui.detail
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +11,7 @@ import retrofit2.Response
 import retrofit2.Call
 import retrofit2.Callback
 
-class DetailViewModel : ViewModel() {
+class DetailViewModel(mApplication: Application) : ViewModel() {
     var errorResponse: String = ""
     var error: String = ""
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -13,12 +14,16 @@ import com.bumptech.glide.Glide
 import com.example.githubuserapp.api.response.GithubUserDetailResponse
 import com.example.githubuserapp.R
 import com.example.githubuserapp.databinding.ActivityDetailBinding
+import com.example.githubuserapp.db.helper.ViewModelFactory
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private var isFavourite: Boolean = false
+    private val detailViewModelFactory by viewModels<DetailViewModel>() {
+        ViewModelFactory.getInstance(application)
+    }
 
     companion object {
         const val KEY_USER = "key_user"
@@ -78,16 +83,16 @@ class DetailActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun setFavouriteButton(favouriteItem: MenuItem, isFavourite: Boolean){
-        if (isFavourite){
+    private fun setFavouriteButton(favouriteItem: MenuItem, isFavourite: Boolean) {
+        if (isFavourite) {
             favouriteItem.setIcon(R.drawable.baseline_favorite_24)
-        }else{
+        } else {
             favouriteItem.setIcon(R.drawable.baseline_favorite_border_24)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.favouriteButton -> {
                 isFavourite = !isFavourite
                 setFavouriteButton(item, isFavourite)
@@ -96,6 +101,7 @@ class DetailActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
+
     private fun setDetailUserData(user: GithubUserDetailResponse) {
         Glide.with(this).load(user.avatarUrl).into(binding.imgUser)
         binding.name.text = user.name ?: "Username"
@@ -112,6 +118,4 @@ class DetailActivity : AppCompatActivity() {
             View.VISIBLE
         } else View.GONE
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.example.githubuserapp.ui.main
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +12,7 @@ import retrofit2.Response
 import retrofit2.Call
 import retrofit2.Callback
 
-class MainViewModel : ViewModel() {
+class MainViewModel() : ViewModel() {
     var errorResponse: String = ""
     var error: String = ""
 
