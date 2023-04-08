@@ -20,6 +20,9 @@ class FavouriteUserRepository(application: Application) {
     fun getAllFavouriteUser(): LiveData<List<FavouriteUser>> =
         mFavouriteUserDao.getAllFavouriteUser()
 
+    fun getFavouriteUserByUsername(username: String): LiveData<FavouriteUser> =
+        mFavouriteUserDao.getFavouriteUserByUsername(username)
+
     fun insert(favouriteUser: FavouriteUser) {
         executorService.execute {
             mFavouriteUserDao.insert(favouriteUser)

@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.githubuserapp.api.response.GithubUserDetailResponse
 import com.example.githubuserapp.R
 import com.example.githubuserapp.databinding.ActivityDetailBinding
+import com.example.githubuserapp.db.entity.FavouriteUser
 import com.example.githubuserapp.db.helper.ViewModelFactory
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,9 +22,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private var isFavourite: Boolean = false
-    private val detailViewModelFactory by viewModels<DetailViewModel>() {
-        ViewModelFactory.getInstance(application)
-    }
+    private var favouriteUser: FavouriteUser? = null
+    private lateinit var detailViewModel: DetailViewModel
 
     companion object {
         const val KEY_USER = "key_user"
@@ -42,12 +42,9 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val username = intent.getStringExtra(KEY_USER)
+        detailViewModel = obtainViewModel(this@DetailActivity)
 
-        val detailViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        ).get(DetailViewModel::class.java)
+        val username = intent.getStringExtra(KEY_USER)
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)
@@ -70,6 +67,9 @@ class DetailActivity : AppCompatActivity() {
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
 
+        if (username != null) {
+            isFavourite = (detailViewModel.getFavouriteUserByUsername(username) == null)
+        }
         binding.tvError.text = "${detailViewModel.error}\n${detailViewModel.errorResponse}"
     }
 
@@ -93,8 +93,16 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+
             R.id.favouriteButton -> {
-                isFavourite = !isFavourite
+                favouriteUser = FavouriteUser()
+
+                favouriteUser.let { userFav ->
+                    userFav?.username = "Krisna"
+                    userFav?.avatarImgUrl = "adadnjajkda"
+                }
+               detailViewModel.insert(favouriteUser!!)
+                Toast.makeText(this, favouriteUser!!.username, Toast.LENGTH_SHORT).show()
                 setFavouriteButton(item, isFavourite)
             }
         }
@@ -103,12 +111,12 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setDetailUserData(user: GithubUserDetailResponse) {
+
         Glide.with(this).load(user.avatarUrl).into(binding.imgUser)
         binding.name.text = user.name ?: "Username"
         binding.username.text = user.login
         binding.tvFollowers.text = this.resources.getString(R.string.followers, user.followers)
         binding.tvFollowing.text = this.resources.getString(R.string.following, user.following)
-
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -117,5 +125,10 @@ class DetailActivity : AppCompatActivity() {
             binding.username.text = ""
             View.VISIBLE
         } else View.GONE
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): DetailViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory).get(DetailViewModel::class.java)
     }
 }

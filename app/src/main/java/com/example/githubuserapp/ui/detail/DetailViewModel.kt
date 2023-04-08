@@ -7,14 +7,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.githubuserapp.api.retrofit.ApiConfig
 import com.example.githubuserapp.api.response.GithubUserDetailResponse
+import com.example.githubuserapp.db.entity.FavouriteUser
+import com.example.githubuserapp.db.repository.FavouriteUserRepository
 import retrofit2.Response
 import retrofit2.Call
 import retrofit2.Callback
 
-class DetailViewModel(mApplication: Application) : ViewModel() {
+class DetailViewModel(application: Application) : ViewModel() {
     var errorResponse: String = ""
     var error: String = ""
 
+    private val mFavouriteUserRepository: FavouriteUserRepository =
+        FavouriteUserRepository(application)
 
     companion object {
         private const val TAG = "DetailViewModel"
@@ -53,5 +57,16 @@ class DetailViewModel(mApplication: Application) : ViewModel() {
             }
         )
     }
+
+    fun insert(favouriteUser: FavouriteUser) {
+        mFavouriteUserRepository.insert(favouriteUser)
+    }
+
+    fun delete(favouriteUser: FavouriteUser) {
+        mFavouriteUserRepository.delete(favouriteUser)
+    }
+
+    fun getFavouriteUserByUsername(username: String): LiveData<FavouriteUser> =
+        mFavouriteUserRepository.getFavouriteUserByUsername(username)
 
 }
