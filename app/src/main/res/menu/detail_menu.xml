@@ -7,6 +7,6 @@
             android:id="@+id/favouriteButton"
             android:icon="@drawable/baseline_favorite_border_24"
             android:title="@string/favourite"
-            app:showAsAction="always"/>
+            app:showAsAction="always" />
     </group>
 </menu>

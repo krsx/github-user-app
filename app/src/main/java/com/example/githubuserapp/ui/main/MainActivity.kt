@@ -17,6 +17,7 @@ import com.example.githubuserapp.api.response.ItemsUsers
 import com.example.githubuserapp.R
 import com.example.githubuserapp.db.helper.ListUserAdapter
 import com.example.githubuserapp.ui.favourite.FavouriteActivity
+import com.example.githubuserapp.ui.setting.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -93,6 +94,10 @@ class MainActivity : AppCompatActivity() {
             R.id.favourite -> {
                 val intentFavourite = Intent(this@MainActivity, FavouriteActivity::class.java)
                 startActivity(intentFavourite)
+            }
+            R.id.settingButton -> {
+                val intentSettings = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(intentSettings)
             }
         }
 

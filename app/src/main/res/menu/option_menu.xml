@@ -14,6 +14,11 @@
             android:icon="@drawable/ic_favorite_24"
             android:title="@string/favourite"
             app:showAsAction="always"/>
+        <item
+            android:id="@+id/settingButton"
+            android:icon="@drawable/baseline_settings_24"
+            android:title="@string/setting"
+            app:showAsAction="always" />
     </group>
 
 

@@ -5,6 +5,7 @@
     <string name="username">Name</string>
     <string name="search_hint">Search username</string>
     <string name="favourite">favourite</string>
+    <string name="setting">setting</string>
 
     <string name="user_image">User Image</string>
     <string name="username_detail">Username</string>
@@ -15,4 +16,6 @@
     <string name="tab_text_1">FOLLOWERS</string>
     <string name="tab_text_2">FOLLOWING</string>
     <string name="tab_follow_user">Tab Follow User</string>
+
+    <string name="dark_mode">Dark Mode</string>
 </resources>
