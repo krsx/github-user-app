@@ -3,11 +3,13 @@ package com.example.githubuserapp.ui.detail
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -23,6 +25,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private var isFavourite: Boolean = false
     private var favouriteUser: FavouriteUser? = null
+    private var username: String? = null
     private lateinit var detailViewModel: DetailViewModel
 
     companion object {
@@ -44,8 +47,7 @@ class DetailActivity : AppCompatActivity() {
 
         detailViewModel = obtainViewModel(this@DetailActivity)
 
-        val username = intent.getStringExtra(KEY_USER)
-
+        username = intent.getStringExtra(KEY_USER)
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)
         val tabs: TabLayout = findViewById(R.id.tabs)
@@ -67,10 +69,13 @@ class DetailActivity : AppCompatActivity() {
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
 
-        if (username != null) {
-            isFavourite = (detailViewModel.getFavouriteUserByUsername(username) == null)
-        }
         binding.tvError.text = "${detailViewModel.error}\n${detailViewModel.errorResponse}"
+
+        detailViewModel.getFavouriteUserByUsername(username!!).observe(
+            this
+        ) { favUser ->
+            isFavourite = favUser != null
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -78,12 +83,12 @@ class DetailActivity : AppCompatActivity() {
         inflater.inflate(R.menu.detail_menu, menu)
 
         val favouriteItem = menu?.findItem(R.id.favouriteButton)
-        setFavouriteButton(favouriteItem!!, isFavourite)
+        setFavouriteButton(favouriteItem!!)
 
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun setFavouriteButton(favouriteItem: MenuItem, isFavourite: Boolean) {
+    private fun setFavouriteButton(favouriteItem: MenuItem) {
         if (isFavourite) {
             favouriteItem.setIcon(R.drawable.baseline_favorite_24)
         } else {
@@ -93,17 +98,28 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-
             R.id.favouriteButton -> {
-                favouriteUser = FavouriteUser()
-
-                favouriteUser.let { userFav ->
-                    userFav?.username = "Krisna"
-                    userFav?.avatarImgUrl = "adadnjajkda"
+                if (!isFavourite) {
+                    favouriteUser?.let { user ->
+                        detailViewModel.insert(user)
+                        Toast.makeText(
+                            this,
+                            "Add to favourite ${user.username}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    favouriteUser?.let { user ->
+                        detailViewModel.delete(user)
+                        Toast.makeText(
+                            this,
+                            "Delete from favourite ${user.username}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-               detailViewModel.insert(favouriteUser!!)
-                Toast.makeText(this, favouriteUser!!.username, Toast.LENGTH_SHORT).show()
-                setFavouriteButton(item, isFavourite)
+                isFavourite = !isFavourite
+                setFavouriteButton(item)
             }
         }
 
@@ -117,6 +133,12 @@ class DetailActivity : AppCompatActivity() {
         binding.username.text = user.login
         binding.tvFollowers.text = this.resources.getString(R.string.followers, user.followers)
         binding.tvFollowing.text = this.resources.getString(R.string.following, user.following)
+
+        favouriteUser = FavouriteUser()
+        favouriteUser.let { userFav ->
+            userFav?.username = user.login!!
+            userFav?.avatarImgUrl = user.avatarUrl
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

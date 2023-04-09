@@ -5,10 +5,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.githubuserapp.api.retrofit.ApiConfig
 import com.example.githubuserapp.api.response.GithubUserDetailResponse
 import com.example.githubuserapp.db.entity.FavouriteUser
 import com.example.githubuserapp.db.repository.FavouriteUserRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Response
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,7 +62,9 @@ class DetailViewModel(application: Application) : ViewModel() {
     }
 
     fun insert(favouriteUser: FavouriteUser) {
-        mFavouriteUserRepository.insert(favouriteUser)
+        viewModelScope.launch(Dispatchers.IO) {
+            mFavouriteUserRepository.insert(favouriteUser)
+        }
     }
 
     fun delete(favouriteUser: FavouriteUser) {
@@ -68,5 +73,6 @@ class DetailViewModel(application: Application) : ViewModel() {
 
     fun getFavouriteUserByUsername(username: String): LiveData<FavouriteUser> =
         mFavouriteUserRepository.getFavouriteUserByUsername(username)
+
 
 }
