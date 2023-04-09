@@ -1,4 +1,4 @@
-package com.example.githubuserapp.ui.main
+package com.example.githubuserapp.db.helper
 
 import android.content.Intent
 import android.view.LayoutInflater

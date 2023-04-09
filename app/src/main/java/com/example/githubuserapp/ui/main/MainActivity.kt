@@ -15,6 +15,7 @@ import com.example.githubuserapp.databinding.ActivityMainBinding
 import androidx.appcompat.widget.SearchView
 import com.example.githubuserapp.api.response.ItemsUsers
 import com.example.githubuserapp.R
+import com.example.githubuserapp.db.helper.ListUserAdapter
 import com.example.githubuserapp.ui.favourite.FavouriteActivity
 
 class MainActivity : AppCompatActivity() {
@@ -45,10 +46,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.tvErrorMain.text = "${mainViewModel.error}\n${mainViewModel.errorResponse}"
 
-        mainViewModel.isNoUser.observe(this){
+        mainViewModel.isNoUser.observe(this) {
             if (it) {
                 binding.tvNoUser.text = "No User Found"
-            } else{
+            } else {
                 binding.tvNoUser.text = ""
             }
         }
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.favourite -> {
                 val intentFavourite = Intent(this@MainActivity, FavouriteActivity::class.java)
                 startActivity(intentFavourite)

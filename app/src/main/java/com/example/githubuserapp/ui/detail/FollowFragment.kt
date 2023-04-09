@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuserapp.api.response.ItemsUsers
-import com.example.githubuserapp.ui.main.ListUserAdapter
+import com.example.githubuserapp.db.helper.ListUserAdapter
 import com.example.githubuserapp.databinding.FragmentFollowBinding
 
 

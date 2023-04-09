@@ -151,6 +151,6 @@ class DetailActivity : AppCompatActivity() {
 
     private fun obtainViewModel(activity: AppCompatActivity): DetailViewModel {
         val factory = ViewModelFactory.getInstance(activity.application)
-        return ViewModelProvider(activity, factory).get(DetailViewModel::class.java)
+        return ViewModelProvider(activity, factory)[DetailViewModel::class.java]
     }
 }
