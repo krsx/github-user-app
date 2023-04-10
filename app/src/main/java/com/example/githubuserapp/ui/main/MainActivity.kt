@@ -9,21 +9,34 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuserapp.databinding.ActivityMainBinding
 import androidx.appcompat.widget.SearchView
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.example.githubuserapp.api.response.ItemsUsers
 import com.example.githubuserapp.R
 import com.example.githubuserapp.db.helper.ListUserAdapter
+import com.example.githubuserapp.db.helper.ViewModelFactory
 import com.example.githubuserapp.ui.favourite.FavouriteActivity
+import com.example.githubuserapp.ui.setting.SettingPreferences
+import com.example.githubuserapp.ui.setting.SettingViewModel
 import com.example.githubuserapp.ui.setting.SettingsActivity
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
+        val actionBar = supportActionBar
+        actionBar?.title = "Home"
+        actionBar?.setBackgroundDrawable(getDrawable(R.color.dark_200))
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -52,6 +65,20 @@ class MainActivity : AppCompatActivity() {
                 binding.tvNoUser.text = "No User Found"
             } else {
                 binding.tvNoUser.text = ""
+            }
+        }
+
+        val pref = SettingPreferences.getInstance(dataStore)
+        val settingViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(application, pref)
+        )[SettingViewModel::class.java]
+
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
 

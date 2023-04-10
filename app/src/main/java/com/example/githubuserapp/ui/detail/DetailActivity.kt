@@ -42,6 +42,11 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val actionBar = supportActionBar
+        actionBar?.title = "Detail User"
+        actionBar?.setBackgroundDrawable(getDrawable(R.color.dark_200))
+
+
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -49,8 +54,6 @@ class DetailActivity : AppCompatActivity() {
 
         username = intent.getStringExtra(KEY_USER)
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
-        val viewPager: ViewPager2 = findViewById(R.id.view_pager)
-        val tabs: TabLayout = findViewById(R.id.tabs)
 
         detailViewModel.findDetailUser(username)
 
@@ -62,10 +65,10 @@ class DetailActivity : AppCompatActivity() {
             showLoading(it)
         }
 
-        viewPager.adapter = sectionsPagerAdapter
+        binding.viewPager.adapter = sectionsPagerAdapter
         sectionsPagerAdapter.username = username.toString()
 
-        TabLayoutMediator(tabs, viewPager) { tab, position ->
+        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
 

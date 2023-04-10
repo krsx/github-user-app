@@ -15,6 +15,9 @@ class FavouriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavouriteBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val actionBar = supportActionBar
+        actionBar?.title = "Favorite"
+        actionBar?.setBackgroundDrawable(getDrawable(R.color.dark_200))
 
         binding = ActivityFavouriteBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -9,6 +9,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.example.githubuserapp.R
 import com.example.githubuserapp.databinding.ActivitySettingsBinding
 import com.example.githubuserapp.db.helper.ViewModelFactory
 
@@ -18,6 +19,10 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val actionBar = supportActionBar
+        actionBar?.title = "Settings"
+        actionBar?.setBackgroundDrawable(getDrawable(R.color.dark_200))
+
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
